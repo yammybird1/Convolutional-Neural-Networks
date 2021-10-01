@@ -1,6 +1,4 @@
 from torch import nn
-from models.ResNet50 import ResNet, bottleneck
-from models.ResNet18 import ResNet, baseBlock
 from models.vgg_16 import VGGNet
 from models.inception_main import GoogLeNet
 import torchvision.transforms as transforms
@@ -205,8 +203,6 @@ def main():
     validDataLoader = data.DataLoader(validData, batch_size=batchSize, shuffle=True)
 
     # initialise nets
-    ResNet18 = ResNet(baseBlock, [2, 2, 2, 2])
-    ResNet50 = ResNet(bottleneck, [3, 4, 6, 3])
     VGG16 = VGGNet()
     Inception = GoogLeNet(True, True)
 
@@ -225,26 +221,12 @@ def main():
 
     # user input for which CNN model to use
     model_use = int(input("\nWhich Model to train? (input number to use model)"
-                          "\n1 - ResNet18"
-                          "\n2 - ResNet50"
-                          "\n3 - Inception"
-                          "\n4 - VGG16"
+                          "\n1 - Inception"
+                          "\n2 - VGG16"
                           "\nInput: "))
 
     # set up appropriate model
     if model_use == 1:
-        print("Model - ResNet18")
-        ResNet18.to(device)
-        net = ResNet18
-        path = "./results/ResNet18.pt"
-
-    elif model_use == 2:
-        print("Model - ResNet50")
-        ResNet50.to(device)
-        net = ResNet50
-        path = "./results/ResNet50.pt"
-
-    elif model_use == 3:
         print("Model - Inception")
         path = "./results/Inception.pt"
         if modeSelect == 1:
@@ -256,8 +238,7 @@ def main():
             net.aux_class = False
             net.training_enable = False
             net.aux1 = net.aux2 = None
-
-    elif model_use == 4:
+    elif model_use == 2:
         print("Model - VGG16")
         VGG16.to(device)
         net = VGG16
